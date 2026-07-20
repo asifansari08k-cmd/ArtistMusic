@@ -1,14 +1,13 @@
 # ==========================================================
-# Copyright (c) 2026 ArtistBots
+# Copyright (c) 2026 MAGMA
 # All Rights Reserved.
 #
-# Project      : ArtistBots API Telegram Music Bot
-# Powered By   : Artist
+# Project      : MAGMA API Telegram Music Bot
+# Powered By   : MAGMA
 # Type         : API Based Telegram Music Bot
 #
-# Bot          : @ArtistApibot
-# Channel      : https://t.me/artistbots
-# GitHub       : https://github.com/elevenyts
+# Channel      : @MAGMAxRICH
+# GitHub       : https://github.com/themagmalord333-oss
 #
 # Unauthorized copying, modification, or redistribution
 # of this source code without permission is prohibited.
@@ -48,7 +47,7 @@ class Inline:
 
         if not remove:
             # Seek buttons row
-            
+
             # Main control buttons row
             keyboard.append(
                 [
@@ -189,7 +188,7 @@ class Inline:
             ],
             [
                 self.ikb(text=lang["help"], callback_data="help", style=ButtonStyle.SUCCESS),
-                self.ikb(text="ꜱᴏᴜʀᴄᴇ", url="https://github.com/elevenyts/ArtistMusic", style=ButtonStyle.SUCCESS),
+                self.ikb(text="ꜱᴏᴜʀᴄᴇ", url=config.GITHUB_REPO, style=ButtonStyle.SUCCESS),
             ],
             [
                 self.ikb(text=lang["support"], url=config.SUPPORT_CHAT, style=ButtonStyle.PRIMARY),
