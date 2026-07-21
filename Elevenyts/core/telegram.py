@@ -4,8 +4,8 @@ import time
 
 from pyrogram import types
 
-from Elevenyts import config
-from Elevenyts.helpers import Media, buttons, utils
+from Anysnap import config
+from Anysnap.helpers import Media, buttons, utils
 
 
 class Telegram:
