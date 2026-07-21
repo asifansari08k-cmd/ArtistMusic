@@ -1,3 +1,18 @@
+# ==========================================================
+# Copyright (c) 2026 Anysnap
+# All Rights Reserved.
+#
+# Project      : Anysnap API Telegram Music Bot
+# Powered By   : Anysnap
+# Type         : API Based Telegram Music Bot
+#
+# Channel      : @ANYSNAP
+# GitHub       : https://github.com/themagmalord333-oss
+#
+# Unauthorized copying, modification, or redistribution
+# of this source code without permission is prohibited.
+# ==========================================================
+
 import asyncio
 import time
 import logging
@@ -22,7 +37,7 @@ logging.getLogger("pymongo").setLevel(logging.ERROR)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("pytgcalls").setLevel(logging.ERROR)
 
-logger = logging.getLogger("Elevenyts")
+logger = logging.getLogger("Anysnap")
 
 # Version
 __version__ = "3.0.1"
@@ -38,45 +53,45 @@ tasks: List = []
 boot: float = time.time()
 
 # Initialize bot client
-from Elevenyts.core.bot import Bot
+from Anysnap.core.bot import Bot
 app = Bot()
 
 # Ensure required directories exist
-from Elevenyts.core.dir import ensure_dirs
+from Anysnap.core.dir import ensure_dirs
 ensure_dirs()
 
 # Initialize userbot/assistant clients
-from Elevenyts.core.userbot import Userbot
+from Anysnap.core.userbot import Userbot
 userbot = Userbot()
 
 # Initialize database connection
-from Elevenyts.core.mongo import MongoDB
+from Anysnap.core.mongo import MongoDB
 db = MongoDB()
 
 # Initialize language system
-from Elevenyts.core.lang import Language
+from Anysnap.core.lang import Language
 lang = Language()
 
 # Initialize Telegram and YouTube utilities
-from Elevenyts.core.telegram import Telegram
-from Elevenyts.core.youtube import YouTube
+from Anysnap.core.telegram import Telegram
+from Anysnap.core.youtube import YouTube
 tg = Telegram()
 yt = YouTube()
 
 # Initialize preload manager for background track downloading
-from Elevenyts.core.preload import PreloadManager
+from Anysnap.core.preload import PreloadManager
 preload = PreloadManager()
 
 # Initialize queue manager
-from Elevenyts.helpers import Queue
+from Anysnap.helpers import Queue
 queue = Queue()
 
 # Initialize preload manager for next-track downloading
-from Elevenyts.helpers._preload import PreloadManager
+from Anysnap.helpers._preload import PreloadManager
 preload = PreloadManager()
 
 # Initialize call handler
-from Elevenyts.core.calls import TgCall
+from Anysnap.core.calls import TgCall
 tune = TgCall()
 
 
@@ -91,7 +106,7 @@ async def stop() -> None:
     - Logs shutdown completion
     """
     logger.info("🛑 Stopping bot...")
-    
+
     # Cancel all background tasks
     for task in tasks:
         task.cancel()
@@ -102,10 +117,10 @@ async def stop() -> None:
             pass
         except Exception:
             pass
-    
+
     # Close all connections
     await app.exit()
     await userbot.exit()
     await db.close()
-    
+
     logger.info("✅ Bot stopped successfully.\n")
