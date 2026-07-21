@@ -5,7 +5,7 @@ import logging
 
 from pymongo import AsyncMongoClient
 
-from Elevenyts import config, logger, userbot
+from Anysnap import config, logger, userbot
 
 
 # Suppress non-critical MongoDB background task errors
@@ -39,7 +39,7 @@ class MongoDB:
             retryWrites=True,
             retryReads=True
         )
-        self.db = self.mongo.Elevenyts
+        self.db = self.mongo.Anysnap
 
         self.admin_list = {}  # Cache admin lists
         self.admin_cache_time = {}  # Track cache freshness
@@ -78,7 +78,7 @@ class MongoDB:
         """
         max_retries = 3
         retry_delay = 5  # Initial delay in seconds
-        
+
         for attempt in range(1, max_retries + 1):
             try:
                 start = time()
@@ -124,7 +124,7 @@ class MongoDB:
         return bool(self.active_calls[chat_id])
 
     async def get_admins(self, chat_id: int, reload: bool = False) -> list[int]:
-        from Elevenyts.helpers._admins import reload_admins
+        from Anysnap.helpers._admins import reload_admins
 
         # **PERFORMANCE FIX**: Increased cache from 5 to 15 minutes
         # Reduces MongoDB queries during peak load (15-20 concurrent streams)
@@ -174,7 +174,7 @@ class MongoDB:
         return num
 
     async def get_assistant(self, chat_id: int):
-        from Elevenyts import tune
+        from Anysnap import tune
 
         if chat_id not in self.assistant:
             doc = await self.assistantdb.find_one({"_id": chat_id})
@@ -192,12 +192,12 @@ class MongoDB:
     async def get_client(self, chat_id: int):
         if chat_id not in self.assistant:
             await self.get_assistant(chat_id)
-        
+
         # Check if assigned assistant is out of range
         if self.assistant[chat_id] > len(userbot.clients):
             # Reassign to a valid assistant
             await self.set_assistant(chat_id)
-        
+
         # Get available clients dynamically based on what's actually running
         available_clients = {}
         if hasattr(userbot, 'one') and userbot.one in userbot.clients:
@@ -206,7 +206,7 @@ class MongoDB:
             available_clients[2] = userbot.two
         if hasattr(userbot, 'three') and userbot.three in userbot.clients:
             available_clients[3] = userbot.three
-        
+
         return available_clients.get(self.assistant[chat_id])
 
     # BLACKLIST METHODS
@@ -339,7 +339,7 @@ class MongoDB:
             doc = await self.cache.find_one({"_id": "gbanned_users"})
             self.gbanned_users = doc.get("user_ids", []) if doc else []
         return self.gbanned_users
-    
+
     async def is_gbanned(self, user_id: int) -> bool:
         """Check if user is globally banned."""
         gbanned = await self.get_gbanned()
@@ -379,7 +379,7 @@ class MongoDB:
                 {"$set": {"channel_id": channel_id}},
                 upsert=True,
             )
-    
+
     async def get_group_for_channel(self, channel_id: int) -> int | None:
         """Reverse lookup: Find which group has this channel set for channel play.
         
@@ -482,13 +482,13 @@ class MongoDB:
         logger.info("🔄 Migrating users and chats from old collections...")
 
         musers, mchats, done = [], [], []
-        
+
         # Collect all users from both old and new collections
         try:
             ulist = [user async for user in self.db.tgusersdb.find()]
         except Exception:
             ulist = []
-        
+
         try:
             ulist.extend([user async for user in self.usersdb.find()])
         except Exception:
@@ -510,7 +510,7 @@ class MongoDB:
             except (ValueError, KeyError) as e:
                 logger.debug(f"Skipping invalid user entry: {e}")
                 continue
-        
+
         # Drop old collections and insert migrated users
         try:
             await self.usersdb.drop()
@@ -546,7 +546,7 @@ class MongoDB:
                     continue
         except Exception as e:
             logger.debug(f"Error reading chats collection: {e}")
-        
+
         # Drop old collection and insert migrated chats
         try:
             await self.chatsdb.drop()
@@ -575,15 +575,15 @@ class MongoDB:
 
         # Preload all cache data
         logger.info("📦 Loading database cache...")
-        
+
         # Load chats, users, blacklists, and logger status
         await self.get_chats()
         await self.get_users()
         await self.get_blacklisted(chat=True)  # Load blacklisted chats
         await self.get_logger()
         await self.get_vplay_enabled()
-        
+
         # Preload sudoers list
         await self.get_sudoers()
-        
+
         logger.info(f"✅ Cache loaded: {len(self.chats)} chats, {len(self.users)} users, {len(self.blacklisted)} blacklisted.")
