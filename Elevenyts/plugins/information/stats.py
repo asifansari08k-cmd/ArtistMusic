@@ -1,14 +1,13 @@
 # ==========================================================
-# Copyright (c) 2026 ArtistBots
+# Copyright (c) 2026 Anysnap
 # All Rights Reserved.
 #
-# Project      : ArtistBots API Telegram Music Bot
-# Powered By   : Artist
+# Project      : Anysnap API Telegram Music Bot
+# Powered By   : Anysnap
 # Type         : API Based Telegram Music Bot
 #
-# Bot          : @ArtistApibot
-# Channel      : https://t.me/artistbots
-# GitHub       : https://github.com/elevenyts
+# Channel      : @ANYSNAP
+# GitHub       : https://github.com/themagmalord333-oss
 #
 # Unauthorized copying, modification, or redistribution
 # of this source code without permission is prohibited.
@@ -21,8 +20,8 @@ import psutil
 from pyrogram import __version__, filters, types
 from pytgcalls import __version__ as pytgver
 
-from Elevenyts import app, config, db, lang, userbot
-from Elevenyts.plugins import all_modules
+from Anysnap import app, config, db, lang, userbot
+from Anysnap.plugins import all_modules
 
 
 @app.on_message(filters.command(["stats"]) & ~app.bl_users)
@@ -33,11 +32,11 @@ async def _stats(_, m: types.Message):
         await m.delete()
     except Exception:
         pass
-    
+
     # Check if user is sudo
     if m.from_user.id not in app.sudoers:
         return
-    
+
     sent = await m.reply_photo(
         photo=config.PING_IMG,
         caption=m.lang["stats_fetching"],
@@ -46,17 +45,17 @@ async def _stats(_, m: types.Message):
     pid = os.getpid()
     cpu_percent = psutil.cpu_percent(interval=0.5)
     cpu_count = psutil.cpu_count()
-    
+
     # Get memory info
     mem = psutil.virtual_memory()
     used_mem = round(mem.used / (1024 ** 3), 2)  # Convert to GB
     total_mem = round(mem.total / (1024 ** 3), 2)
-    
+
     # Get disk info
     disk = psutil.disk_usage("/")
     used_disk = round(disk.used / (1024 ** 3), 2)  # Convert to GB
     total_disk = round(disk.total / (1024 ** 3), 2)
-    
+
     _utext = m.lang["stats_user"].format(
         app.name,
         len(userbot.clients),
@@ -67,7 +66,7 @@ async def _stats(_, m: types.Message):
         len(await db.get_chats()),
         len(await db.get_users()),
     )
-    
+
     # Add system stats for sudo users
     _utext += m.lang["stats_sudo"].format(
         len(all_modules),
@@ -79,5 +78,5 @@ async def _stats(_, m: types.Message):
         __version__,
         pytgver,
     )
-    
+
     await sent.edit_caption(_utext)
