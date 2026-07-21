@@ -8,17 +8,17 @@ from typing import Optional, Union
 
 from pyrogram import enums, types
 from py_yt import VideosSearch, Playlist
-from Elevenyts import config, logger
-from Elevenyts.helpers import Track, utils
+from Anysnap import config, logger
+from Anysnap.helpers import Track, utils
 
 class YouTube:
     def __init__(self):
         """Initialize Anysnap YouTube handler (100% API Based)."""
         self.base = "https://www.youtube.com/watch?v="
-        
+
         # Hardcoded URL set to your live AWS server to prevent localhost clashes
         self.api_url = os.getenv("ANYSNAP_API_URL", "http://18.209.168.200:8000").rstrip('/')
-        
+
         self.regex = re.compile(
             r"(https?://)?(www\.|m\.|music\.)?"
             r"(youtube\.com/(watch\?v=|shorts/|live/|embed/|playlist\?list=)|youtu\.be/)"
@@ -26,7 +26,7 @@ class YouTube:
         )
 
         self.search_cache = {}
-        
+
         logger.info("=" * 50)
         logger.info("📹 Anysnap YouTube Handler Initialized")
         logger.info(f"🔗 API URL: {self.api_url}")
@@ -81,7 +81,7 @@ class YouTube:
         try:
             _search = VideosSearch(query, limit=1)
             results = await _search.next()
-            
+
             if results and results["result"]:
                 data = results["result"][0]
                 duration = data.get("duration")
@@ -100,14 +100,14 @@ class YouTube:
                     is_live=is_live,
                 )
                 self.search_cache[cache_key] = (track, current_time)
-                
+
                 if len(self.search_cache) > 100:
                     oldest_key = min(self.search_cache.keys(), key=lambda k: self.search_cache[k][1])
                     del self.search_cache[oldest_key]
                 return replace(track)
         except Exception as e:
             logger.warning(f"⚠️ Search failed for '{query}': {e}")
-            
+
         return None
 
     async def playlist(self, limit: int, user: str, url: str) -> list[Track]:
@@ -151,7 +151,7 @@ class YouTube:
         try:
             youtube_url = self.base + video_id
             endpoint = "/video" if video else "/download"
-            
+
             # API endpoint generate
             api_process_link = f"{self.api_url}{endpoint}?url={urllib.parse.quote(youtube_url)}"
             logger.info(f"🚀 Calling Anysnap API: {api_process_link}")
@@ -161,15 +161,15 @@ class YouTube:
                     if response.status != 200:
                         logger.error(f"❌ API returned status {response.status}")
                         return None
-                        
+
                     # Fix: content_type=None bypasses strict mimetype checking
                     track_data = await response.json(content_type=None)
-                    
+
                     if track_data.get("status") is True:
                         # Extract exact filename URL from JSON response
                         filename_path = track_data.get("download_url") 
                         final_stream_link = f"{self.api_url}{filename_path}"
-                        
+
                         logger.info(f"✅ Anysnap Stream Link Generated: {final_stream_link}")
                         return final_stream_link
                     else:
