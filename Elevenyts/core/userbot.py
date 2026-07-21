@@ -1,17 +1,4 @@
-# ==========================================================
-# Copyright (c) 2026 MAGMA
-# All Rights Reserved.
-#
-# Project      : MAGMA API Telegram Music Bot
-# Powered By   : MAGMA
-# Type         : API Based Telegram Music Bot
-#
-# Channel      : @MAGMAxRICH
-# GitHub       : https://github.com/themagmalord333-oss
-#
-# Unauthorized copying, modification, or redistribution
-# of this source code without permission is prohibited.
-# ==========================================================
+
 from pyrogram import Client
 
 from Elevenyts import config, logger
