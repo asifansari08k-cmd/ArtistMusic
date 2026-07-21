@@ -2,7 +2,7 @@ import json
 from functools import wraps
 from pathlib import Path
 
-from Elevenyts import db, logger
+from Anysnap import db, logger
 
 # Supported language codes and their display names
 lang_codes = {
@@ -19,7 +19,7 @@ class Language:
         """Initialize the language system and load all translation files."""
         self.lang_codes = lang_codes
         # Directory containing translation files
-        self.lang_dir = Path("Elevenyts/locales")
+        self.lang_dir = Path("Anysnap/locales")
         self.languages = self.load_files()  # Load all language files into memory
 
     def load_files(self):
