@@ -2,7 +2,7 @@ import asyncio
 
 from pyrogram import enums, errors, types
 
-from Elevenyts import app, config, db, queue, yt
+from Anysnap import app, config, db, queue, yt
 
 
 def checkUB(play):
@@ -16,7 +16,7 @@ def checkUB(play):
                 return None
             except Exception:
                 return None
-        
+
         if not m.from_user:
             await safe_reply(m.lang["play_user_invalid"])
             return
@@ -47,7 +47,7 @@ def checkUB(play):
             await safe_reply(m.lang["play_video_disabled"])
             return
         video = video_requested
-        
+
         url = yt.url(m)
         # Only validate URL if not replying to media (Telegram files have t.me URLs)
         if url and not m.reply_to_message and not yt.valid(url):
