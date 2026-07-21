@@ -1,6 +1,6 @@
 from pyrogram import Client
 
-from Elevenyts import config, logger
+from Anysnap import config, logger
 
 
 class Userbot(Client):
@@ -19,8 +19,8 @@ class Userbot(Client):
 
         # Create a Pyrogram client for each configured session
         for key, string_key in clients.items():
-            # Unique name: ElevenytsTuneUB1, ElevenytsTuneUB2, etc.
-            name = f"ElevenytsTuneUB{key[-1]}"
+            # Unique name: AnysnapTuneUB1, AnysnapTuneUB2, etc.
+            name = f"AnysnapTuneUB{key[-1]}"
             # Get session string from config
             session = getattr(config, string_key)
 
@@ -90,13 +90,13 @@ class Userbot(Client):
         if config.SESSION3:
             await self.boot_client(3, self.three)
 
-        # MAGMA Support Channel auto-join logic
+        # Anysnap Support Channel auto-join logic
         target_channel = config.SUPPORT_CHANNEL.replace("https://t.me/", "").replace("@", "")
         if target_channel:
             for client in self.clients:
                 try:
                     await client.join_chat(target_channel)
-                    logger.info(f"Joined MAGMA Support Channel: {target_channel}")
+                    logger.info(f"Joined Anysnap Support Channel: {target_channel}")
                 except:
                     pass
 
