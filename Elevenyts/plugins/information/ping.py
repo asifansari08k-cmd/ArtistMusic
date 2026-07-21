@@ -1,12 +1,12 @@
 # ==========================================================
-# Copyright (c) 2026 MAGMA
+# Copyright (c) 2026 Anysnap
 # All Rights Reserved.
 #
-# Project      : MAGMA API Telegram Music Bot
-# Powered By   : MAGMA
+# Project      : Anysnap API Telegram Music Bot
+# Powered By   : Anysnap
 # Type         : API Based Telegram Music Bot
 #
-# Channel      : @MAGMAxRICH
+# Channel      : @ANYSNAP
 # GitHub       : https://github.com/themagmalord333-oss
 #
 # Unauthorized copying, modification, or redistribution
@@ -16,8 +16,8 @@ import time
 import psutil
 
 from pyrogram import filters, types
-from Elevenyts import app, tune, boot, config, lang
-from Elevenyts.helpers import buttons
+from Anysnap import app, tune, boot, config, lang
+from Anysnap.helpers import buttons
 
 
 @app.on_message(filters.command(["alive", "ping"]) & ~app.bl_users)
@@ -43,7 +43,7 @@ async def _ping(_, m: types.Message):
     cpu_percent = psutil.cpu_percent(interval=0.5)
 
     # Get active chats count
-    from Elevenyts import db
+    from Anysnap import db
     active_chats = len(await db.get_chats())
 
     caption_text = m.lang["ping_pong"].format(
