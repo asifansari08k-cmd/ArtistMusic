@@ -1,12 +1,3 @@
-# ==========================================================
-# Copyright (c) 2026 Anysnap
-# All Rights Reserved.
-#
-# Project      : Anysnap API Telegram Music Bot
-# Powered By   : Anysnap
-# Type         : API Based Telegram Music Bot
-# ==========================================================
-
 import os
 import re
 import urllib.parse
