@@ -3,7 +3,7 @@ from functools import wraps
 from pyrogram import StopPropagation, enums, types
 from pyrogram.errors import ChatSendPlainForbidden, ChatWriteForbidden
 
-from Elevenyts import app, db
+from Anysnap import app, db
 
 
 def admin_check(func):
@@ -83,10 +83,10 @@ async def can_manage_vc_channel(chat_id: int, user_id: int) -> bool:
     """Check if user can manage VC in channel mode"""
     if user_id in app.sudoers:
         return True
-    
+
     if await db.is_auth(chat_id, user_id):
         return True
-    
+
     admins = await db.get_admins(chat_id)
     return user_id in admins
 
@@ -121,12 +121,12 @@ async def reload_admins(chat_id: int) -> list[int]:
 async def is_admin_callback(query: types.CallbackQuery) -> bool:
     if not query.from_user:
         return False
-    
+
     user_id = query.from_user.id
     chat_id = query.message.chat.id
-    
+
     if user_id in app.sudoers:
         return True
-    
+
     admins = await db.get_admins(chat_id)
     return user_id in admins
