@@ -1,14 +1,13 @@
 # ==========================================================
-# Copyright (c) 2026 ArtistBots
+# Copyright (c) 2026 MAGMA
 # All Rights Reserved.
 #
-# Project      : ArtistBots API Telegram Music Bot
-# Powered By   : Artist
+# Project      : MAGMA API Telegram Music Bot
+# Powered By   : MAGMA
 # Type         : API Based Telegram Music Bot
 #
-# Bot          : @ArtistApibot
-# Channel      : https://t.me/artistbots
-# GitHub       : https://github.com/elevenyts
+# Channel      : @MAGMAxRICH
+# GitHub       : https://github.com/themagmalord333-oss
 #
 # Unauthorized copying, modification, or redistribution
 # of this source code without permission is prohibited.
@@ -43,14 +42,14 @@ from Elevenyts.plugins import all_modules
 # HTTP Server for Render health checks
 class HealthCheckHandler(BaseHTTPRequestHandler):
     """Simple HTTP handler for Render health checks"""
-    
+
     def do_GET(self):
         """Handle GET requests"""
         self.send_response(200)
         self.send_header('Content-type', 'text/plain')
         self.end_headers()
         self.wfile.write(b'Bot is running')
-    
+
     def log_message(self, format, *args):
         """Suppress log messages to keep console clean"""
         pass
@@ -58,7 +57,7 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
 
 def run_http_server():
     """Run a simple HTTP server for Render health checks"""
-    port = int(os.environ.get("PORT", 8000))
+    port = int(os.environ.get("PORT", 8080))
     server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
     logger.info(f"🌐 HTTP health check server started on port {port}")
     server.serve_forever()
@@ -80,13 +79,13 @@ async def main():
 
         # Step 3: Connect to MongoDB database
         await db.connect()
-        
+
         # Step 4: Start the main bot client
         await app.boot()
-        
+
         # Step 5: Start assistant/userbot clients (for joining voice chats)
         await userbot.boot()
-        
+
         # Step 6: Initialize voice call handler
         await tune.boot()
 
@@ -113,7 +112,7 @@ async def main():
             logger.info("Received stop signal...")
         except Exception as e:
             logger.error(f"Error during idle: {e}", exc_info=True)
-        
+
         # Step 10: Cleanup and shutdown when bot is stopped
         await stop()
     except Exception as e:
