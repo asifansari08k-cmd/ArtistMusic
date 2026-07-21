@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ChatMemberStatus, ChatType
 from pyrogram.types import Message
 
-from Elevenyts import app, config, db
+from Anysnap import app, config, db
 
 
 @app.on_message(filters.command(["channelplay"]) & filters.group & ~app.bl_users)
@@ -13,11 +13,11 @@ async def channelplay_command(_, m: Message):
         await m.delete()
     except Exception:
         pass
-    
+
     # Check if from_user exists (not sent by channel/anonymous admin)
     if not m.from_user:
         return await m.reply_text("❌ ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ᴄᴀɴɴᴏᴛ ʙᴇ ᴜꜱᴇᴅ ʙʏ ᴄʜᴀɴɴᴇʟꜱ ᴏʀ ᴀɴᴏɴʏᴍᴏᴜꜱ ᴀᴅᴍɪɴꜱ.")
-    
+
     # Check if user is admin
     member = await app.get_chat_member(m.chat.id, m.from_user.id)
     if member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
